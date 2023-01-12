@@ -12,154 +12,82 @@ import 'react-toastify/dist/ReactToastify.css';
 function PasswordGenerator(){
 
     const [range, setRange] = useState('1');
-    const [upperCaseCheck, setUpperCaseCheck] = useState(false)
-    const [lowerCaseCheck, setLowerCaseCheck] = useState(false)
-    const [numbersCheck, setNumbersCheck] = useState(false)
-    const [symbolsCheck, setSymbolsCheck] = useState(false)
-    // const [password, setPassword] = useState('');
+    const [checkbox, setCheckbox] = useState({
+        upperCase: false,
+        lowerCase: false,
+        numbers  : false,
+        symbols  : false
+    });
     const [password, setPassword] = useState('N5$SYOTp');
-    const [strength, setStrenth] = useState([]);
     const [copyCheck, setCopyCheck] = useState(false);
-
-
-    var checkboxUpperKey, checkboxLowerKey, checkboxNumberKey, checkboxSymbolKey;
-    if(upperCaseCheck){
-        checkboxUpperKey = 1;
-    }else{
-        checkboxUpperKey = 0;
-    }
-    if(lowerCaseCheck){
-        checkboxLowerKey = 1
-    }else{
-        checkboxLowerKey = 0
-    }
-    if(numbersCheck){
-        checkboxNumberKey = 1
-    }else{
-        checkboxNumberKey = 0
-    }
-    if(symbolsCheck){
-        checkboxSymbolKey = 1
-    }else{
-        checkboxSymbolKey = 0
-    }
-
-    var x = checkboxLowerKey + checkboxUpperKey + checkboxNumberKey + checkboxSymbolKey
-    // console.log(upperCaseCheck, lowerCaseCheck, numbersCheck, symbolsCheck, checkboxUpperKey, checkboxLowerKey, x)
-
-    // const upperCase = '';
-    const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
-    const numbers = '0123456789';
-    const symbols = '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\';
-
-    var uppkeyKeyResult = '';
-    var lowerKeyResult = '';
-    var numbersKeyResult = '';  
-    var symbolsKeyResult = '';
-
-    function upperKey(key){
-        for(var i = 0; i<key; i++){
-            uppkeyKeyResult += upperCase.charAt(Math.floor(Math.random() * upperCase.length))
-        }
-        return uppkeyKeyResult;
-    }
     
-    function loweKey(key){
-        for(var i = 0; i<key; i++){
-            lowerKeyResult += lowerCase.charAt(Math.floor(Math.random() * lowerCase.length))
+
+    let indicator1 = checkbox.upperCase ? 1 : 0
+    let indicator2 = checkbox.lowerCase ? 1 : 0
+    let indicator3 = checkbox.numbers ? 1 : 0
+    let indicator4 = checkbox.symbols ? 1 : 0
+    let indictor = indicator1 + indicator2 + indicator3 + indicator4;
+
+
+    let UpperKeys =  "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let lowerKeys =  "abcdefghijklmnopqrstuvwxyz";
+    let NumberKeys = "0123456789";
+    let symbolkeys = "@#$%^&*()_+~|}{[]></-=";
+    let RandomKey = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()_+~|}{[]></-=";
+
+
+    function Generator(keys){
+        return keys[Math.floor(Math.random()* keys.length)];
+    }
+
+    let generatedPassword = '';
+    function generatePassword(){
+        if(!checkbox.upperCase && !checkbox.lowerCase && !checkbox.numbers && !checkbox.symbols){
+            generatedPassword += Generator(RandomKey)
         }
-        return lowerKeyResult;
-    }
-    
-    function numbersKey(key){
-        for(var i = 0; i<key; i++){
-            numbersKeyResult += numbers.charAt(Math.floor(Math.random() * numbers.length))
-        }
-        return numbersKeyResult;
-    }
-    
-    function symbolsKey(key){
-        for(var i = 0; i<key; i++){
-            symbolsKeyResult += symbols.charAt(Math.floor(Math.random() * symbols.length))
-        }
-        return symbolsKeyResult;
-    }
-
-
-
-
-
-    function arraySum(a) {
-        return a.reduce((a, b) => a + b, 0)
-      }
-    function getRandomIntInclusive(min, max) {
-        const minCeil = Math.ceil(min)
-        const maxFloor = Math.floor(max)
-        return Math.floor(Math.random() * (maxFloor - minCeil + 1)) + minCeil
-      }
-    function randomNumbersWithFixedSum(quantity, sum) {
-        const randoms = [...Array(quantity - 1).keys()].map(q => getRandomIntInclusive(1, sum/quantity))
-        const last = sum - arraySum(randoms)
-        return [...randoms, last]
-      }
-    //   console.log(randomNumbersWithFixedSum(4, range))
-
-
-
-
-
-    let keyArray = [1,0,0,0]
-    if(!(range==1)){
-        keyArray = randomNumbersWithFixedSum(x, range);
-    }
-    console.log(keyArray)
-
-      if(upperCaseCheck){
-        upperKey(keyArray[0]);
-      }
-      if(lowerCaseCheck){
-        loweKey(keyArray[1]);
-      }
-      if(numbersCheck){
-        numbersKey(keyArray[2]);
-      }
-      if(symbolsCheck){
-        symbolsKey(keyArray[3]);
-      }
-    //   console.log(uppkeyKeyResult, lowerKeyResult, numbersKeyResult, symbolsKeyResult)
-
-
-
-      let finalKey = uppkeyKeyResult.concat(lowerKeyResult, numbersKeyResult, symbolsKeyResult);
-      console.log(finalKey)
-      
-    
-      function ButtonClick(){
-          setCopyCheck(false);
-          setPassword(finalKey);
-          setStrenth(x);
-          if(range<x){
-              setPassword("NOT VALID !");
-              setStrenth(0);
+        if(range>=indictor){
+            if(checkbox.upperCase){
+                generatedPassword += Generator(UpperKeys);
             }
-          if(x==0){
-                setPassword("NOT ENTERED !")
+            if(checkbox.lowerCase){
+                generatedPassword += Generator(lowerKeys);
             }
+            if(checkbox.numbers){
+                generatedPassword += Generator(NumberKeys);
+            }
+            if(checkbox.symbols){
+                generatedPassword += Generator(symbolkeys);
+            }
+            if(generatedPassword.length < range){
+                return generatePassword(generatedPassword);
+            }
+            var finalPassword = limit(generatedPassword, range);
+            setPassword(finalPassword);
+            generatedPassword='';
+        }else{
+            setPassword('Invalid!');
+        }
+    }
+
+    const limit = (string, length) => {
+        return string.length < length ? string : string.substring(0, length)
+    }
+
+    
+    function ButtonClick(){
+        generatePassword();
       }
 
-      function CopyToClipBoard(){
+    function CopyToClipBoard(){
         setcopy(password);
         setCopyCheck(true);
-        toast.success(`You have copied "${password}"`, {autoClose:2000}, {position: toast.POSITION.TOP_CENTER});
+        toast.success('copied');
       }
 
 
-    
 
     return(
         <div>
-            {/* <div className={styles.heading}><div className='col-12'>Password Generator</div></div> */}
         <div className={styles.wrapper}>
             <p className={styles.heading}>Password Generator</p>
             <div className={styles.container}>
@@ -190,7 +118,7 @@ function PasswordGenerator(){
                     <div className={styles.range}>
                         <div className='row'>
                             <div className={styles.slidecontainer}>
-                                <input onChange={(e)=>{setRange(e.target.value)}} value={range} id='range' type='range' min='0' max='8'/>
+                                <input onChange={(e)=>{setRange(e.target.value)}} value={range} id='range' type='range' min='0' max='10'/>
                             </div>
                         </div>
                     </div>  
@@ -199,7 +127,8 @@ function PasswordGenerator(){
                         <div className='row'>
                             <div className='col-1'>
                                 <div>
-                                    <input onClick={() => setUpperCaseCheck(!upperCaseCheck)} type='checkbox'/>
+                                    <input onClick={() => setCheckbox({...checkbox, upperCase: !(checkbox.upperCase)})} type='checkbox'/>
+                                    {/* <input onClick={() => setUpperCaseCheck(!upperCaseCheck)} type='checkbox'/> */}
                                 </div>
                             </div>
                             <div className='col-9'><p>Include Uppercase Letters</p></div>
@@ -207,7 +136,8 @@ function PasswordGenerator(){
                         <div className='row'>
                             <div className='col-1'>
                                 <div>
-                                    <input onClick={() => setLowerCaseCheck(!lowerCaseCheck)} type='checkbox'/>
+                                    <input onClick={() => setCheckbox({...checkbox, lowerCase: !(checkbox.lowerCase)})} type='checkbox'/>
+                                    {/* <input onClick={() => setLowerCaseCheck(!lowerCaseCheck)} type='checkbox'/> */}
                                 </div>
                             </div>
                             <div className='col-9'><p>Include Lowercase Letterd</p></div>
@@ -215,7 +145,8 @@ function PasswordGenerator(){
                         <div className='row'>
                             <div className='col-1'>
                                 <div>
-                                    <input onClick={() => setNumbersCheck(!numbersCheck)} type='checkbox'/>
+                                    <input onClick={() => setCheckbox({...checkbox, numbers: !(checkbox.numbers)})} type='checkbox'/>
+                                    {/* <input onClick={() => setNumbersCheck(!numbersCheck)} type='checkbox'/> */}
                                 </div>
                             </div>
                             <div className='col-9'><p>Include Numbers</p></div>
@@ -223,7 +154,8 @@ function PasswordGenerator(){
                         <div className='row'>
                             <div className='col-1'>
                                 <div>
-                                    <input onClick={() => setSymbolsCheck(!symbolsCheck)} type='checkbox'/>
+                                    <input onClick={() => setCheckbox({...checkbox, symbols: !(checkbox.symbols)})} type='checkbox'/>
+                                    {/* <input onClick={() => setSymbolsCheck(!symbolsCheck)} type='checkbox'/> */}
                                 </div>
                             </div>
                             <div className='col-9'><p>Include Symbols</p></div>
@@ -237,10 +169,10 @@ function PasswordGenerator(){
                             </div>
                             <div className='col-4'>
                                 <div className={styles.indicatorContainer}>
-                                        <div className='col-1'><div className={`${styles.indicator} ${strength>=1?(styles.indicatorActive):("") }`}></div></div>
-                                        <div className='col-1'><div className={`${styles.indicator} ${strength>=2?(styles.indicatorActive):("") }`}></div></div>
-                                        <div className='col-1'><div className={`${styles.indicator} ${strength>=3?(styles.indicatorActive):("") }`}></div></div>
-                                        <div className='col-1'><div className={`${styles.indicator} ${strength>=4?(styles.indicatorActive):("") }`}></div></div>
+                                        <div className='col-1'><div className={`${styles.indicator} ${indictor>=1?(styles.indicatorActive):("") }`}></div></div>
+                                        <div className='col-1'><div className={`${styles.indicator} ${indictor>=2?(styles.indicatorActive):("") }`}></div></div>
+                                        <div className='col-1'><div className={`${styles.indicator} ${indictor>=3?(styles.indicatorActive):("") }`}></div></div>
+                                        <div className='col-1'><div className={`${styles.indicator} ${indictor>=4?(styles.indicatorActive):("") }`}></div></div>
                                 </div>
                             </div>
                         </div>
@@ -256,7 +188,17 @@ function PasswordGenerator(){
                     </button>
                 </div>
             </div>
-            <ToastContainer />
+            <ToastContainer position="top-center"
+                            autoClose={false} 
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover 
+                            limit={1}
+            />
         </div>
         </div>
     )

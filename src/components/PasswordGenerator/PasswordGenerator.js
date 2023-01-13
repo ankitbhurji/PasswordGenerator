@@ -2,7 +2,7 @@ import styles from './PasswordGenerator.module.css'
 import copy from '../images/copy.svg'
 import copy2 from '../images/copy2.svg'
 import arrow from '../images/arrow.svg'
-import React, { useState } from 'react'
+import React, {useState } from 'react'
 import setcopy from "copy-to-clipboard";
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -18,8 +18,18 @@ function PasswordGenerator(){
         numbers  : false,
         symbols  : false
     });
-    const [password, setPassword] = useState('N5$SYOTp');
-    const [copyCheck, setCopyCheck] = useState(false);
+    const [password, setPassword] = useState({
+        first:'N5$SYOTp',
+        second: 'Empty',
+        third: 'Empty',
+        fourth: 'Empty'
+    });
+    const [copyCheck, setCopyCheck] = useState({
+        isCopyFirst:false,
+        isCopySecond:false,
+        isCopyThird: false,
+        isCopyFourth: false
+    });
     
 
     let indicator1 = checkbox.upperCase ? 1 : 0
@@ -40,6 +50,7 @@ function PasswordGenerator(){
         return keys[Math.floor(Math.random()* keys.length)];
     }
 
+    
     let generatedPassword = '';
     function generatePassword(){
         if(!checkbox.upperCase && !checkbox.lowerCase && !checkbox.numbers && !checkbox.symbols){
@@ -62,10 +73,12 @@ function PasswordGenerator(){
                 return generatePassword(generatedPassword);
             }
             var finalPassword = limit(generatedPassword, range);
-            setPassword(finalPassword);
+            // setPassword(finalPassword);
+            // setPassword({...password, first:finalPassword});
+            setPassword( {...password, first:finalPassword, second:password.first, third:password.second, fourth:password.third})
             generatedPassword='';
         }else{
-            setPassword('Invalid!');
+            setPassword({...password, first:'Invalid!'});
         }
     }
 
@@ -74,30 +87,43 @@ function PasswordGenerator(){
     }
 
     
+    
+    
+
     function ButtonClick(){
         generatePassword();
-      }
-
+        setCopyCheck({...copyCheck,
+                        isCopyFirst:false,
+                        isCopySecond:false,
+                        isCopyThird:false,
+                        isCopyFourth:false
+                    })
+    };
     function CopyToClipBoard(){
-        setcopy(password);
-        setCopyCheck(true);
+        setcopy(password.first);
+        setCopyCheck({...copyCheck,
+                        isCopyFirst:true,
+                        isCopySecond:false,
+                        isCopyThird:false,
+                        isCopyFourth:false
+                    });
         toast.success('copied');
-      }
-
-
-
+    };
+    
     return(
-        <div>
+        <div className='row'>
+        <div className='col-7'>
         <div className={styles.wrapper}>
             <p className={styles.heading}>Password Generator</p>
             <div className={styles.container}>
                 <div className={styles.display}>
                     <div className='row'>
                         <div className='col-8'>
-                            <div className={styles.screen}><p>{password}</p></div>
+                            {/* <div className={styles.screen}><p>{password}</p></div> */}
+                            <div className={styles.screen}><p>{password.first}</p></div>
                         </div>
                         <div className='col-4'>
-                            <div onClick={CopyToClipBoard} className={copyCheck?(styles.copyActive):(styles.copy)}><img src={copyCheck?(copy2):(copy)} width="40" height="20" /></div>
+                            <div onClick={CopyToClipBoard} className={copyCheck.isCopyFirst?(styles.copyActive):(styles.copy)}><img src={copyCheck.isCopyFirst?(copy2):(copy)} width="40" height="20" /></div>
                         </div>
                     </div> 
                 </div>
@@ -137,6 +163,7 @@ function PasswordGenerator(){
                             <div className='col-1'>
                                 <div>
                                     <input onClick={() => setCheckbox({...checkbox, lowerCase: !(checkbox.lowerCase)})} type='checkbox'/>
+                                    {/* <input onClick={() => setLowerCaseCheck(!lowerCaseCheck)} type='checkbox'/> */}
                                 </div>
                             </div>
                             <div className='col-9'><p>Include Lowercase Letterd</p></div>
@@ -145,6 +172,7 @@ function PasswordGenerator(){
                             <div className='col-1'>
                                 <div>
                                     <input onClick={() => setCheckbox({...checkbox, numbers: !(checkbox.numbers)})} type='checkbox'/>
+                                    {/* <input onClick={() => setNumbersCheck(!numbersCheck)} type='checkbox'/> */}
                                 </div>
                             </div>
                             <div className='col-9'><p>Include Numbers</p></div>
@@ -153,6 +181,7 @@ function PasswordGenerator(){
                             <div className='col-1'>
                                 <div>
                                     <input onClick={() => setCheckbox({...checkbox, symbols: !(checkbox.symbols)})} type='checkbox'/>
+                                    {/* <input onClick={() => setSymbolsCheck(!symbolsCheck)} type='checkbox'/> */}
                                 </div>
                             </div>
                             <div className='col-9'><p>Include Symbols</p></div>
@@ -174,15 +203,7 @@ function PasswordGenerator(){
                             </div>
                         </div>
                     </div>
-
-                    <button onClick={ButtonClick} className={styles.generateButton}>
-                        <div className='row'>
-                            <div className='col-6'>
-                                <div><p>GENERATE</p></div>
-                            </div>
-                            <div className='col-5'><img src={arrow} width="40" height="20" /></div>
-                        </div>
-                    </button>
+                    <button onClick={ButtonClick} className={styles.button}><span>GENERATE </span></button>
                 </div>
             </div>
             <ToastContainer position="top-center"
@@ -196,6 +217,36 @@ function PasswordGenerator(){
                             pauseOnHover 
                             limit={1}
             />
+        </div>
+        </div>
+        <div className='col-5'>
+            <div className= {styles.PreData}>
+                <p className={styles.recentPasswords}>Recent Passwords</p>
+                <div className={styles.prevData1}>
+                    <div className='row'>
+                        <div className='col-8'>
+                            <div><p>{password.second}</p></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div className={styles.prevData2}>
+                    <div className='row'>
+                        <div className='col-8'>
+                            <div><p>{password.third}</p></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div className={styles.prevData3}>
+                    <div className='row'>
+                        <div className='col-8'>
+                            <div><p>{password.fourth}</p></div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
         </div>
         </div>
     )

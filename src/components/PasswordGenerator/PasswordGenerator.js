@@ -137,7 +137,6 @@ function PasswordGenerator(){
                             <div className='col-1'>
                                 <div>
                                     <input onClick={() => setCheckbox({...checkbox, lowerCase: !(checkbox.lowerCase)})} type='checkbox'/>
-                                    {/* <input onClick={() => setLowerCaseCheck(!lowerCaseCheck)} type='checkbox'/> */}
                                 </div>
                             </div>
                             <div className='col-9'><p>Include Lowercase Letterd</p></div>
@@ -146,7 +145,6 @@ function PasswordGenerator(){
                             <div className='col-1'>
                                 <div>
                                     <input onClick={() => setCheckbox({...checkbox, numbers: !(checkbox.numbers)})} type='checkbox'/>
-                                    {/* <input onClick={() => setNumbersCheck(!numbersCheck)} type='checkbox'/> */}
                                 </div>
                             </div>
                             <div className='col-9'><p>Include Numbers</p></div>
@@ -155,7 +153,6 @@ function PasswordGenerator(){
                             <div className='col-1'>
                                 <div>
                                     <input onClick={() => setCheckbox({...checkbox, symbols: !(checkbox.symbols)})} type='checkbox'/>
-                                    {/* <input onClick={() => setSymbolsCheck(!symbolsCheck)} type='checkbox'/> */}
                                 </div>
                             </div>
                             <div className='col-9'><p>Include Symbols</p></div>

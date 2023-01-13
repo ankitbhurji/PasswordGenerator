@@ -109,7 +109,38 @@ function PasswordGenerator(){
                     });
         toast.success('copied');
     };
-    
+    function CopyToClipBoardPrev1(){
+        setcopy(password.second);
+        setCopyCheck({...copyCheck,
+                        isCopySecond:true,
+                        isCopyFirst:false,
+                        isCopyThird:false,
+                        isCopyFourth:false
+                    });
+        toast.success('copied');
+    };
+    function CopyToClipBoardPrev2(){
+        setcopy(password.third);
+        setCopyCheck({...copyCheck,
+                        isCopyThird:true,
+                        isCopyFirst:false,
+                        isCopySecond:false,
+                        isCopyFourth:false
+                    });
+        toast.success('copied');
+    };
+    function CopyToClipBoardPrev3(){
+        setcopy(password.fourth);
+       setCopyCheck({...copyCheck,
+                       isCopyFourth:true,
+                       isCopyFirst:false,
+                       isCopySecond:false,
+                       isCopyThird:false
+                    });
+       toast.success('copied');
+    };
+
+
     return(
         <div className='row'>
         <div className='col-7'>
@@ -227,7 +258,11 @@ function PasswordGenerator(){
                         <div className='col-8'>
                             <div><p>{password.second}</p></div>
                         </div>
-                        
+                        <div className='col-4'>
+                            <div className={styles.prevCopy}>
+                                <div onClick={CopyToClipBoardPrev1} className={copyCheck.isCopySecond?(styles.copyActive):(styles.copy)}><img src={copyCheck.isCopySecond?(copy2):(copy)} width="40" height="20" /></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className={styles.prevData2}>
@@ -235,7 +270,11 @@ function PasswordGenerator(){
                         <div className='col-8'>
                             <div><p>{password.third}</p></div>
                         </div>
-                        
+                        <div className='col-4'>
+                            <div className={styles.prevCopy}>
+                                <div onClick={CopyToClipBoardPrev2} className={copyCheck.isCopyThird?(styles.copyActive):(styles.copy)}><img src={copyCheck.isCopyThird?(copy2):(copy)} width="40" height="20" /></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className={styles.prevData3}>
@@ -243,7 +282,11 @@ function PasswordGenerator(){
                         <div className='col-8'>
                             <div><p>{password.fourth}</p></div>
                         </div>
-                        
+                        <div className='col-4'>
+                            <div className={styles.prevCopy}>
+                                <div onClick={CopyToClipBoardPrev3} className={copyCheck.isCopyFourth?(styles.copyActive):(styles.copy)}><img src={copyCheck.isCopyFourth?(copy2):(copy)} width="40" height="20" /></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
